@@ -80,6 +80,20 @@ $app->get('/api', function () use ($app) {
 
 });
 
+$app->post('/expert/questionsAnswered', function() use ($app){
+    executeSql(
+        '
+            INSERT INTO expert_answers (`expertAnswer`, `dateAnswered`)
+            VALUES (:expertAnswer, :flag, NOW())
+        ',
+        [
+            'expertAnswer' => $app->request->params('expertAnswer'),
+            'flag'  => $app->request->params('flag'),
+        ]
+    );
+    $app->redirect('/');
+});
+
 // industry example
 $app->get('/industries', function () use ($app) {
 	$industries = executeSql('
