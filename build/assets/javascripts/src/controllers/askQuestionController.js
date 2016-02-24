@@ -12,8 +12,10 @@ require('../scss/expertPages.scss');
  * @constructor
  * @ngInject
  */
-function askQuestionController() {
-
+function askQuestionController($state, $scope, $timeout, blueEconomics) {
+    blueEconomics.categories.getCategories().then(function(data){
+        $scope.categories = data;
+    });
 }
 
 module.exports = askQuestionController;

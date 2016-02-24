@@ -77,7 +77,36 @@ $app->get('/api', function () use ($app) {
 		echo $row->Name;
 		echo "<br>";
 	};
+});
 
+$app->post('/asked-question', function() use ($app){
+    $question = $app->request->params('question');
+    $category = $app->request->params('category');
+    $email = $app->request->params('email');
+    executeSql(
+        '
+            INSERT INTO askquestion (`question`, `email`, `category_id`)
+            VALUES (:question, :email, :category)
+        ',
+        [
+            'question' => $question,
+            'category' => $category,
+            'email' => $email
+        ]
+    );
+});
+
+$app->get('/categories', function() use ($app){
+	$res = executeSql("SELECT * FROM categories");
+	$results = [];
+	foreach ($res as $row){
+		$results[] = [
+			'id' => $row->id,
+			'category' => $row->category
+		];
+	}
+	$app->response->headers->set('Content-Type', 'application/json');
+	$app->response->write(json_encode($results));
 });
 
 // industry example
@@ -135,7 +164,6 @@ $app->get('/jobs', function () use ($app) {
 			'name' => $occupation->name,
 		];
 	};
-
 	$app->response->headers->set('Content-Type', 'application/json');
 	$app->response->write(json_encode($result));
 });

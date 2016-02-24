@@ -69,7 +69,6 @@ function blueEconomics($http, $q) {
         }, {
             params: params
         });
-
         return $http[args.type.toLowerCase()](url, args)
             .then(function(result) {
                 self.data = result.data;
@@ -111,7 +110,6 @@ function blueEconomics($http, $q) {
         } else {
             return deferredRequest(this, this.url, args, params);
         }
-
         return deferred.promise;
     };
 
@@ -147,6 +145,18 @@ function blueEconomics($http, $q) {
         } // override this in case the data is something besides a list of strings
     };
 
+    /**
+     * @description GET /categories
+     */
+    function Categories() {
+        BaseQuery.call(this, '/categories', {});
+    }
+
+    Categories.prototype = Object.create(BaseQuery.prototype);
+
+    Categories.prototype.getCategories = function() {
+        return this.get({}, {});
+    };
 
     /**
      @description    GET /industries
@@ -338,6 +348,7 @@ function blueEconomics($http, $q) {
         this.questions = new Questions(args);
         this.workExperience = new WorkExperience(args);
         this.jobDetails = new JobDetails(args);
+        this.categories = new Categories();
 
         this.search = getDebouncedSearch(this);
     }
